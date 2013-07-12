@@ -1,0 +1,1 @@
+load 'db_backup_rails/tasks/backup_db.rake'
