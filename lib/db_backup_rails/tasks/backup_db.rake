@@ -79,11 +79,7 @@ namespace :backup do
     ENV['NUM_TO_KEEP'].to_i || 7
   end
 
-  def rails_env
-    ENV['RAILS_ENV'] || 'development'
-  end
-
   def settings
-    @settings ||= YAML.load(File.read(File.join(app_root, "config", "database.yml")))[rails_env]
+    @settings ||= YAML.load(File.read(File.join(app_root, "config", "database.yml")))[Rails.env]
   end
 end
