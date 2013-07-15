@@ -1,5 +1,5 @@
 # Simple database backup rake task
-# Supports mysql
+# Supports mysql and postgres
 # Env vars:
 #   BACKUP_DIR - where to store files. Relative to Rails app root. Defaults to '../shared/backup',
 #                which works nicely with Capistrano's default file structure.
@@ -9,16 +9,38 @@
 namespace :backup do
   desc "Backup database"
   task :db => [:environment] do
-    password_arg = settings['password'].present? ? "-p#{settings['password']}" : ''
-
     FileUtils.mkdir_p backup_dir
 
+    adapter = settings['adapter']
+    host = settings['host'] || '127.0.0.1'
+    port = settings['port']
+    database = settings['database']
+    user = settings['user']
+    password = settings['password']
+
     # Run the appropriate backup utility
-    case settings['adapter']
+    case adapter
     when 'mysql'
-      system "/usr/bin/env mysqldump -u #{settings['user']} #{password_arg} #{settings['database']} > #{output_file}"
-    # when 'postgresl'
-    #   system "/usr/bin/env pgdump -Fc -u #{settings['user']} #{password_arg} #{settings['database']} > #{output_file}"
+      port ||= '3306'
+      password_arg = password.present? ? "-p#{password}" : ''
+      system "/usr/bin/env mysqldump -h #{host} -P #{port} -u #{user} #{password_arg} #{database} > #{output_file}"
+    when 'postgresql'
+      port ||= '5432'
+
+      # pg_dump doesn't take a password arg, so we have to write the password to the ~/.pgpass file.
+      pgpass_file = ENV['HOME']+'/.pgpass'
+      pgpass_content = "#{host}:#{port}:#{database}:#{user}:#{password}"
+      File.open(pgpass_file, 'a+') do |pgpass|
+        pgpass.write(pgpass_content) unless pgpass.grep(pgpass_content).present?
+      end
+
+      # Ensure that .pgpass has the correct mode (only really needed if we just)
+      # created it.
+      # Ruby 1.8/1.9 compatibility
+      file_util_class = File.respond_to?(:chmod) ? File : FileUtils
+      file_util_class.chmod(0600, pgpass_file)
+
+      system "/usr/bin/env pg_dump -Fc -U #{user} --no-password #{database} > #{output_file}"
     else
       raise RuntimeError, "I don't know how to back up #{settings['adapter']} databases!"
     end
