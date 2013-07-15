@@ -55,8 +55,6 @@ environment other than development.
 
 ## Limitations
 
-* Currently only works with MySQL. Postgres support should be coming soon.
-* Will only back up local databases, not those on another machine.
 * Only works on Unix-y systems
 
 ## Contributing
