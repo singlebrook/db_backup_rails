@@ -63,9 +63,7 @@ namespace :backup do
   end
 
   def app_root
-    root = RAILS_ROOT || Rails.root
-    raise RuntimeError, 'Could not determine Rails root' unless root
-    root
+    Rails.root
   end
 
   def backup_dir
