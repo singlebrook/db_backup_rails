@@ -15,7 +15,7 @@ namespace :backup do
     host = settings['host'] || '127.0.0.1'
     port = settings['port']
     database = settings['database']
-    user = settings['user']
+    user = settings['username']
     password = settings['password']
 
     # Run the appropriate backup utility
