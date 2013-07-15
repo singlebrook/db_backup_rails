@@ -30,7 +30,9 @@ This gem provides `backup:db` and `backup:db:prune` rake tasks.
 
 ### Custom Directory
 
-This defaults to using a directory at `[Rails.root]/../shared/backup`, which
+**Please note that the default dir has changed in 1.0.0!**
+
+This defaults to using a directory at `[Rails.root]/../../shared/backup`, which
 works well with Capistrano's standard directory structure. You can override it
 by setting `BACKUP_DIR`. If `BACKUP_DIR` is relative, it will be relative to
 `Rails.root`. E.g.

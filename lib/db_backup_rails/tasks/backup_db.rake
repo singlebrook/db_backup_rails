@@ -1,7 +1,7 @@
 # Simple database backup rake task
 # Supports mysql and postgres
 # Env vars:
-#   BACKUP_DIR - where to store files. Relative to Rails app root. Defaults to '../shared/backup',
+#   BACKUP_DIR - where to store files. Relative to Rails app root. Defaults to '../../shared/backup',
 #                which works nicely with Capistrano's default file structure.
 #   NUM_TO_KEEP - how many backup files to keep. Defaults to 7.
 #   RAILS_ENV - which database to back up. Defaults to development like all Rake tasks.
@@ -63,7 +63,7 @@ namespace :backup do
   end
 
   def backup_dir
-    relative_dir = ENV['BACKUP_DIR'] || '../shared/backup'
+    relative_dir = ENV['BACKUP_DIR'] || '../../shared/backup'
     File.expand_path(relative_dir, Rails.root)
   end
 
