@@ -40,7 +40,7 @@ namespace :backup do
       file_util_class = File.respond_to?(:chmod) ? File : FileUtils
       file_util_class.chmod(0600, pgpass_file)
 
-      system "/usr/bin/env pg_dump -Fc -U #{user} --no-password #{database} > #{output_file}"
+      system "/usr/bin/env pg_dump -Fc -h #{host} -p #{port} -U #{user} --no-password #{database} > #{output_file}"
     else
       raise RuntimeError, "I don't know how to back up #{settings['adapter']} databases!"
     end
