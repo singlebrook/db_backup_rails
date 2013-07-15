@@ -50,7 +50,7 @@ namespace :backup do
   namespace :db do
     desc "Prune database backups"
     task :prune => [:environment] do
-      files = Dir.glob("#{backup_dir}/#{settings['database']}-*")
+      files = Dir.glob("#{output_file_prefix}-*")
 
       r_index = (-1 * num_to_keep) - 1
 
@@ -62,17 +62,17 @@ namespace :backup do
     end
   end
 
-  def app_root
-    Rails.root
-  end
-
   def backup_dir
     relative_dir = ENV['BACKUP_DIR'] || '../shared/backup'
-    File.expand_path(relative_dir, app_root)
+    File.expand_path(relative_dir, Rails.root)
   end
 
   def output_file
-    File.expand_path("#{backup_dir}/#{settings['database']}-#{Time.now.strftime('%Y%m%d')}.dump", app_root)
+    File.expand_path("#{output_file_prefix}-#{Time.now.strftime('%Y%m%d')}.dump", Rails.root)
+  end
+
+  def output_file_prefix
+    "#{backup_dir}/#{settings['database']}"
   end
 
   def num_to_keep
@@ -80,6 +80,6 @@ namespace :backup do
   end
 
   def settings
-    @settings ||= YAML.load(File.read(File.join(app_root, "config", "database.yml")))[Rails.env]
+    @settings ||= YAML.load(File.read(Rails.root.join("config", "database.yml")))[Rails.env]
   end
 end
