@@ -76,7 +76,11 @@ namespace :backup do
   end
 
   def num_to_keep
-    ENV['NUM_TO_KEEP'].to_i || 7
+    if ENV['NUM_TO_KEEP'].to_i > 0
+      ENV['NUM_TO_KEEP'].to_i
+    else
+      7
+    end
   end
 
   def settings
