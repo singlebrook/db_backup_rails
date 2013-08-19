@@ -68,7 +68,8 @@ namespace :backup do
   end
 
   def output_file
-    File.expand_path("#{output_file_prefix}-#{Time.now.strftime('%Y%m%d')}.dump", Rails.root)
+    # Memoized so that it stays the same even if a task runs into the next day
+    @output_file ||= File.expand_path("#{output_file_prefix}-#{Time.now.strftime('%Y%m%d')}.dump", Rails.root)
   end
 
   def output_file_prefix
