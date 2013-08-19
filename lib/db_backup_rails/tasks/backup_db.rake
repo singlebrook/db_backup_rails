@@ -50,7 +50,7 @@ namespace :backup do
   namespace :db do
     desc "Prune database backups"
     task :prune => [:environment] do
-      files = Dir.glob("#{output_file_prefix}-*")
+      files = Dir.glob("#{output_file_prefix}-*").sort
 
       r_index = (-1 * num_to_keep) - 1
 
