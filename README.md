@@ -17,7 +17,7 @@ Or install it yourself as:
 
     $ gem install db_backup_rails
 
-If you are using Rails 2.3, add the following to your Rakefile:
+Add the following to your Rakefile:
 
     require 'db_backup_rails/tasks'
 
