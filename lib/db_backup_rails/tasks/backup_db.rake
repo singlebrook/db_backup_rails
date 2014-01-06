@@ -20,7 +20,7 @@ namespace :backup do
 
     # Run the appropriate backup utility
     case adapter
-    when 'mysql'
+    when 'mysql', 'mysql2'
       port ||= '3306'
       password_arg = password.present? ? "-p#{password}" : ''
       system "/usr/bin/env mysqldump -h #{host} -P #{port} -u #{user} #{password_arg} #{database} > #{output_file}"
